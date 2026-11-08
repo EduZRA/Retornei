@@ -10,7 +10,6 @@ const NICHES = {
       step1: "Nome e WhatsApp. Dá para importar de uma planilha ou dos seus contatos em poucos minutos.",
       step2: "Um toque depois do corte. O Retornei calcula quando aquele cliente costuma voltar.",
       step3: "Toda manhã aparece quem está na hora. A mensagem sai do seu número, com o seu jeito de falar.",
-      businessLabel: "Nome da barbearia",
     },
     calc: { clients: 200, ticket: 45, lost: 2 },
     back: { count: 14, money: 980 },
@@ -34,7 +33,6 @@ const NICHES = {
       step1: "Nome, WhatsApp e o carro. Dá para importar de uma planilha ou dos seus contatos em poucos minutos.",
       step2: "Um toque depois da lavagem ou do polimento. O Retornei calcula quando aquele cliente costuma voltar.",
       step3: "Toda manhã aparece quem está na hora. A mensagem sai do seu número, com o seu jeito de falar.",
-      businessLabel: "Nome da estética automotiva",
     },
     calc: { clients: 120, ticket: 90, lost: 3 },
     back: { count: 9, money: 1260 },
@@ -73,7 +71,6 @@ NICHES.geral = {
     step1: "Nome e WhatsApp. Dá para importar de uma planilha ou dos seus contatos em poucos minutos.",
     step2: "Um toque depois de cada serviço. O Retornei calcula quando aquele cliente costuma voltar.",
     step3: "Toda manhã aparece quem está na hora. A mensagem sai do seu número, com o seu jeito de falar.",
-    businessLabel: "Nome do negócio",
   },
   calc: { clients: 150, ticket: 60, lost: 2 },
 };
@@ -515,21 +512,27 @@ function showMsg(text, kind) {
   msg.className = "form-msg " + (kind === "ok" ? "is-ok" : "is-error");
 }
 
+const pick = (name) => (form.querySelector(`input[name="${name}"]:checked`) || {}).value || "";
+
 function validate() {
   let firstBad = null;
-  const checks = [
+  const textChecks = [
     [form.elements.name, (v) => v.trim().length >= 2],
     [phone, (v) => v.replace(/\D/g, "").length >= 10],
-    [form.elements.size, (v) => v !== ""],
-    [form.elements.current_method, (v) => v !== ""],
   ];
-  checks.forEach(([el, ok]) => {
+  textChecks.forEach(([el, ok]) => {
     const good = ok(el.value);
     el.setAttribute("aria-invalid", good ? "false" : "true");
     if (!good && !firstBad) firstBad = el;
   });
+  ["size", "current_method"].forEach((group) => {
+    const box = form.querySelector(`[data-group="${group}"]`);
+    const good = pick(group) !== "";
+    box.classList.toggle("is-invalid", !good);
+    if (!good && !firstBad) firstBad = box.querySelector("input");
+  });
   if (firstBad) {
-    showMsg("Preencha nome, WhatsApp com DDD e as duas escolhas para entrar na lista.", "error");
+    showMsg("Preencha nome, WhatsApp com DDD e as duas escolhas para continuar.", "error");
     firstBad.focus();
     return false;
   }
@@ -541,6 +544,11 @@ function validate() {
   return true;
 }
 
+// Ao escolher uma opção, tira o destaque de erro daquele grupo.
+form.querySelectorAll(".choices input").forEach((input) => {
+  input.addEventListener("change", () => input.closest(".choices").classList.remove("is-invalid"));
+});
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   if (!validate()) return;
@@ -548,9 +556,8 @@ form.addEventListener("submit", async (e) => {
   const data = {
     name: form.elements.name.value.trim(),
     whatsapp: phone.value.replace(/\D/g, ""),
-    business: form.elements.business.value.trim(),
-    size: form.elements.size.value,
-    current_method: form.elements.current_method.value,
+    size: pick("size"),
+    current_method: pick("current_method"),
     niche: nicheKey,
     website: form.elements.website.value, // armadilha para robôs
     tracking,
@@ -574,6 +581,6 @@ form.addEventListener("submit", async (e) => {
   } catch (err) {
     showMsg("Não foi possível enviar agora. Confira sua conexão e tente de novo em instantes.", "error");
     submit.disabled = false;
-    submit.textContent = "Entrar na lista de espera";
+    submit.textContent = "Quero testar grátis";
   }
 });

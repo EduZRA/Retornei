@@ -27,8 +27,8 @@
         <h1 data-copy="headline">Tem cliente que vinha sempre e sumiu. Você nem percebeu.</h1>
         <p class="lead" data-copy="lead">O Retornei avisa todo dia quais clientes estão na hora de voltar ao seu negócio e deixa a mensagem de WhatsApp pronta. Você só toca em enviar.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#lista">Entrar na lista de espera</a>
-          <p class="hero-note">Teste grátis no lançamento. Sem cartão.</p>
+          <a class="btn btn-primary" href="#lista">Quero testar grátis</a>
+          <p class="hero-note">Grátis no lançamento. Sem cartão. Leva 20&nbsp;segundos.</p>
         </div>
       </div>
 
@@ -104,6 +104,7 @@
       <div class="calc-result" aria-live="polite">
         <p class="calc-number" id="calcResult">R$ 1.800</p>
         <p class="calc-caption">por mês podem estar indo embora. Trazer de volta metade disso já paga o Retornei muitas vezes.</p>
+        <a class="btn btn-primary calc-cta" href="#lista">Quero recuperar esses clientes</a>
       </div>
     </section>
 
@@ -125,59 +126,6 @@
       </ol>
     </section>
 
-    <section class="signup" id="lista" aria-labelledby="signupTitle">
-      <div class="signup-copy">
-        <h2 id="signupTitle">Entre na lista de espera</h2>
-        <p>Quem entrar agora testa grátis no lançamento e garante o preço de fundador enquanto for assinante.</p>
-      </div>
-
-      <form class="signup-form" id="leadForm" novalidate>
-        <input type="hidden" name="niche" id="nicheField" value="geral">
-        <div class="hp" aria-hidden="true">
-          <label>Não preencha <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
-        </div>
-
-        <label class="field">
-          <span>Seu nome</span>
-          <input type="text" name="name" autocomplete="name" required maxlength="80">
-        </label>
-        <label class="field">
-          <span>WhatsApp com DDD</span>
-          <input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(11) 91234-5678" required maxlength="20">
-        </label>
-        <label class="field">
-          <span data-copy="businessLabel">Nome do negócio</span>
-          <input type="text" name="business" maxlength="80">
-        </label>
-        <label class="field">
-          <span>Clientes atendidos por mês</span>
-          <select name="size" required>
-            <option value="">Escolha uma faixa</option>
-            <option value="ate-100">Até 100</option>
-            <option value="100-300">De 100 a 300</option>
-            <option value="300-mais">Mais de 300</option>
-          </select>
-        </label>
-        <label class="field">
-          <span>Como você lembra seus clientes de voltar hoje?</span>
-          <select name="current_method" required>
-            <option value="">Escolha uma opção</option>
-            <option value="nao-lembro">Não lembro, espero eles voltarem</option>
-            <option value="whatsapp-manual">Mando mensagem no WhatsApp quando lembro</option>
-            <option value="sistema">Uso um sistema ou app de agenda</option>
-            <option value="outro">Outro jeito</option>
-          </select>
-        </label>
-        <label class="consent">
-          <input type="checkbox" name="consent" required>
-          <span>Aceito receber mensagens do Retornei sobre o lançamento. Veja a <a href="/privacidade.html">política de privacidade</a>.</span>
-        </label>
-
-        <button class="btn btn-primary btn-block" type="submit" id="leadSubmit">Entrar na lista de espera</button>
-        <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
-      </form>
-    </section>
-
     <section class="faq" aria-labelledby="faqTitle">
       <h2 id="faqTitle">Perguntas rápidas</h2>
       <details>
@@ -196,6 +144,58 @@
         <summary>Já uso um app de agenda. Serve para mim?</summary>
         <p>Serve. Apps de agenda lembram de quem já marcou horário. O Retornei cuida de quem não marcou e está sumindo.</p>
       </details>
+    </section>
+
+    <section class="signup" id="lista" aria-labelledby="signupTitle">
+      <div class="signup-copy">
+        <h2 id="signupTitle">Entre na lista de espera</h2>
+        <p>Quem entrar agora testa grátis no lançamento e garante o preço de fundador enquanto for assinante.</p>
+      </div>
+
+      <form class="signup-form" id="leadForm" novalidate>
+        <input type="hidden" name="niche" id="nicheField" value="geral">
+        <div class="hp" aria-hidden="true">
+          <label>Não preencha <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <label class="field">
+          <span>Seu nome</span>
+          <input type="text" name="name" autocomplete="name" required maxlength="80">
+        </label>
+        <label class="field">
+          <span>WhatsApp com DDD</span>
+          <input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(11) 91234-5678" required maxlength="20" aria-describedby="whatsHint">
+          <small class="field-hint" id="whatsHint">É por aqui que avisamos quando abrir. Nada de spam.</small>
+        </label>
+
+        <fieldset class="choices" data-group="size">
+          <legend>Clientes atendidos por mês</legend>
+          <div class="choice-row">
+            <label class="choice"><input type="radio" name="size" value="ate-100" required><span>Até 100</span></label>
+            <label class="choice"><input type="radio" name="size" value="100-300"><span>100 a 300</span></label>
+            <label class="choice"><input type="radio" name="size" value="300-mais"><span>Mais de 300</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset class="choices" data-group="current_method">
+          <legend>Como você lembra seus clientes de voltar hoje?</legend>
+          <div class="choice-stack">
+            <label class="choice"><input type="radio" name="current_method" value="nao-lembro" required><span>Não lembro, espero eles voltarem</span></label>
+            <label class="choice"><input type="radio" name="current_method" value="whatsapp-manual"><span>Mando mensagem quando lembro</span></label>
+            <label class="choice"><input type="radio" name="current_method" value="sistema"><span>Uso um sistema ou app de agenda</span></label>
+            <label class="choice"><input type="radio" name="current_method" value="outro"><span>Outro jeito</span></label>
+          </div>
+        </fieldset>
+
+        <label class="consent">
+          <input type="checkbox" name="consent" required>
+          <span>Aceito receber mensagens do Retornei sobre o lançamento. Veja a <a href="/privacidade.html">política de privacidade</a>.</span>
+        </label>
+
+        <button class="btn btn-primary btn-block" type="submit" id="leadSubmit">Quero testar grátis</button>
+        <p class="form-note">Grátis no lançamento. Sem cartão. Leva 20&nbsp;segundos.</p>
+        <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+      </form>
     </section>
   </main>
 

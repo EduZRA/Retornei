@@ -485,6 +485,53 @@ main > section {
 .field input[aria-invalid="true"],
 .field select[aria-invalid="true"] { border-color: #C0392B; }
 
+.field-hint { font-size: .88rem; color: var(--muted); }
+
+/* Escolhas por toque (no lugar de listas) */
+.choices { border: 0; margin: 0; padding: 0; min-width: 0; }
+.choices legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-weight: 700;
+  font-size: .95rem;
+  color: var(--text);
+}
+.choice-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.choice-stack { display: grid; gap: 8px; }
+
+.choice { position: relative; display: block; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.choice input {
+  position: absolute;
+  opacity: 0;
+  width: 1px; height: 1px;
+}
+.choice span {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-ui);
+  background: var(--card);
+  color: var(--text);
+  line-height: 1.25;
+  transition: border-color .15s ease, background-color .15s ease;
+}
+.choice-row .choice span { justify-content: center; text-align: center; padding: 10px 6px; }
+.choice:hover span { border-color: #A9C4BF; }
+.choice input:checked + span {
+  border-color: var(--back);
+  background: #E7F4EC;
+  font-weight: 700;
+  color: var(--back-deep);
+}
+.choice input:focus-visible + span { outline: 3px solid var(--back); outline-offset: 2px; }
+.choices.is-invalid .choice span { border-color: #C0392B; }
+
+.form-note { text-align: center; color: var(--muted); font-size: .92rem; margin-top: -6px; }
+
+.calc-cta { margin-top: 24px; }
+
 /* Como funciona ------------------------------------------------- */
 
 .how h2, .faq h2, .signup h2 { font-size: var(--step-3); }
