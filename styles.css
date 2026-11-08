@@ -90,7 +90,7 @@ main > section {
   font-weight: 800;
   font-size: 1.25rem;
 }
-.brand-mark { width: 28px; height: 28px; color: var(--back); }
+.brand-mark { width: 36px; height: 36px; display: block; }
 
 .topbar-cta {
   font-weight: 700;
@@ -386,6 +386,29 @@ main > section {
   animation: press .45s ease-out;
 }
 @keyframes press { from { transform: scale(.6); opacity: 1; } to { transform: scale(1.9); opacity: 0; } }
+
+/* Aviso "cliente voltou" com o mascote comemorando */
+.toast {
+  position: absolute;
+  left: 12px; right: 12px; bottom: 86px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px 10px 10px;
+  background: var(--ink);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 14px 30px -12px rgba(18, 59, 74, .55);
+  opacity: 0;
+  transform: translateY(14px) scale(.96);
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity .25s ease, transform .35s cubic-bezier(.2, .9, .3, 1.3);
+}
+.toast.is-visible { opacity: 1; transform: none; }
+.toast img { flex: none; border-radius: 11px; }
+.toast p { font-size: .92rem; line-height: 1.3; }
+.toast-money { font-family: var(--display); font-weight: 800; font-size: 1.1rem; color: #F2B653; }
 
 /* Controles abaixo do celular ----------------------------------- */
 

@@ -13,6 +13,7 @@ O Retornei mostra todo dia quais clientes de um negócio de serviço recorrente 
 | `api/lead.js` | Recebe o formulário e grava no Supabase |
 | `supabase/leads.sql` | Cria a tabela de inscrições |
 | `vercel.json` | Endereços por nicho |
+| `marca/`, `favicon.svg`, `manifest.webmanifest` | Logo do bumerangue, expressões do mascote e ícones para a aba e a tela do celular |
 
 ## Endereços por nicho
 

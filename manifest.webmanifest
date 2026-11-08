@@ -1,0 +1,15 @@
+{
+  "name": "Retornei",
+  "short_name": "Retornei",
+  "description": "Seus clientes de volta na hora certa. O que é bom, volta.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2F6F5",
+  "theme_color": "#123B4A",
+  "icons": [
+    { "src": "/marca/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/marca/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/marca/icone-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

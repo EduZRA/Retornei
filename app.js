@@ -201,6 +201,7 @@ function setRowState(row, state) {
 
 function buildList() {
   list.textContent = "";
+  if (typeof toast !== "undefined" && toast) toast.classList.remove("is-visible");
   rows = niche.due.map((c) => {
     const li = document.createElement("li");
     li.className = "due";
@@ -340,8 +341,19 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape" && current) handleBack();
 });
 
+const toast = $("backToast");
+let toastTimer = null;
+function showToast(row) {
+  $("toastName").textContent = row.c.name.split(" ")[0];
+  $("toastMoney").textContent = `+${brl(row.c.value)} este mês`;
+  toast.classList.add("is-visible");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("is-visible"), 2200);
+}
+
 function markBack(row) {
   setRowState(row, "back");
+  showToast(row);
   const next = { count: back.count + 1, money: back.money + row.c.value };
   setBack(next.count, next.money, true);
   back = next;

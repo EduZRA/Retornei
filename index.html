@@ -6,6 +6,10 @@
   <title>Retornei · Seus clientes de volta na hora certa</title>
   <meta name="description" content="O Retornei mostra todo dia quais clientes estão na hora de voltar e deixa a mensagem de WhatsApp pronta para enviar.">
   <meta name="theme-color" content="#123B4A">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
@@ -15,7 +19,7 @@
 
   <header class="topbar">
     <a class="brand" href="/" aria-label="Retornei, início">
-      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 21a9 9 0 1 1 3.5 3.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M6.5 16.5 9 21.5l5-2.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <img class="brand-mark" src="/favicon.svg" alt="" width="36" height="36">
       <span>Retornei</span>
     </a>
     <a class="topbar-cta" href="#lista">Quero testar</a>
@@ -73,6 +77,10 @@
             </div>
 
             <span class="tap" id="tap" aria-hidden="true"></span>
+            <div class="toast" id="backToast" aria-hidden="true">
+              <img src="/marca/mascote-comemora.svg" alt="" width="52" height="52">
+              <p><strong id="toastName"></strong> voltou!<br><span class="toast-money" id="toastMoney"></span></p>
+            </div>
           </div>
         </div>
         <div class="phone-controls">
@@ -191,7 +199,7 @@
   </main>
 
   <footer class="footer">
-    <p>Retornei · protótipo em teste</p>
+    <p><strong>Retornei.</strong> O que é bom, volta.</p>
     <a href="/privacidade.html">Política de privacidade</a>
   </footer>
 
