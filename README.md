@@ -13,6 +13,8 @@ O Retornei mostra todo dia quais clientes de um negócio de serviço recorrente 
 | `api/lead.js` | Recebe o formulário e grava no Supabase |
 | `supabase/leads.sql` | Cria a tabela de inscrições |
 | `vercel.json` | Endereços por nicho |
+| `app/` | Protótipo navegável do app do cliente, com dados de exemplo (`/app`) |
+| `admin/`, `api/admin.js` | Seu painel de administração com senha (`/admin`) |
 | `marca/`, `favicon.svg`, `manifest.webmanifest` | Logo do bumerangue, expressões do mascote e ícones para a aba e a tela do celular |
 
 ## Endereços por nicho
@@ -34,8 +36,9 @@ Nos anúncios, use parâmetros UTM para saber qual criativo trouxe cada inscriç
 4. Em **Settings > Environment Variables** do projeto na Vercel, crie:
    - `SUPABASE_URL` = a Project URL
    - `SUPABASE_SERVICE_KEY` = a chave service_role
-5. Faça um novo deploy (Deployments > Redeploy) para as variáveis valerem.
-6. Teste: entre na página, preencha o formulário e confira a linha nova em **Table Editor > leads** no Supabase.
+5. Ainda nas variáveis de ambiente, crie `ADMIN_PASSWORD` com uma senha longa, só sua. É ela que abre o painel em `/admin`.
+6. Faça um novo deploy (Deployments > Redeploy) para as variáveis valerem.
+7. Teste: entre na página, preencha o formulário e confira a linha nova em **Table Editor > leads** no Supabase.
 
 A chave service_role dá acesso total ao banco. Ela fica só na Vercel, nunca no código nem no front-end.
 

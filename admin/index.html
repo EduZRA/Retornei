@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Retornei · Painel</title>
+  <meta name="theme-color" content="#123B4A">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/admin/admin.css">
+</head>
+<body>
+  <!-- Entrada -->
+  <main class="login" id="login">
+    <img src="/marca/logo-solto.svg" alt="" width="64" height="64">
+    <h1>Painel do Retornei</h1>
+    <form id="loginForm" novalidate>
+      <label class="field"><span>Senha do painel</span><input type="password" id="pwd" autocomplete="current-password" required></label>
+      <button class="btn btn-go" type="submit" id="enter">Entrar</button>
+      <p class="msg" id="loginMsg" role="alert"></p>
+    </form>
+    <button class="link" type="button" id="demoBtn">Ver com dados de exemplo</button>
+  </main>
+
+  <!-- Painel -->
+  <div class="dash" id="dash" hidden>
+    <header class="dash-top">
+      <div class="brand"><img src="/marca/logo-solto.svg" alt="" width="36" height="36"><span>Painel do Retornei</span></div>
+      <p class="demo-flag" id="demoFlag" hidden>Dados de exemplo</p>
+      <div class="top-actions">
+        <button class="btn btn-soft" type="button" id="refresh">Atualizar</button>
+        <button class="btn btn-soft" type="button" id="logout">Sair</button>
+      </div>
+    </header>
+
+    <div class="filters" role="group" aria-label="Filtros">
+      <div class="seg" id="periodSeg" role="radiogroup" aria-label="Período">
+        <button type="button" data-v="1">Hoje</button><button type="button" data-v="7">7 dias</button><button type="button" data-v="30" class="on">30 dias</button><button type="button" data-v="all">Tudo</button>
+      </div>
+      <div class="seg" id="nicheSeg" role="radiogroup" aria-label="Nicho">
+        <button type="button" data-v="all" class="on">Todos</button><button type="button" data-v="barbearia">Barbearia</button><button type="button" data-v="estetica-automotiva">Estética automotiva</button><button type="button" data-v="geral">Página geral</button>
+      </div>
+    </div>
+
+    <section class="kpis" id="kpis" aria-label="Números principais"></section>
+
+    <div class="grid">
+      <section class="card wide">
+        <h2>Inscrições por dia</h2>
+        <div class="daybars" id="dayBars"></div>
+      </section>
+
+      <section class="card">
+        <h2>Funil dos anúncios</h2>
+        <p class="note">Visitas e gasto ainda não chegam sozinhos. Preencha com os números do Gerenciador de Anúncios e da Vercel; ficam salvos neste navegador.</p>
+        <div id="funnel"></div>
+      </section>
+
+      <section class="card">
+        <h2>Como eles lembram os clientes hoje</h2>
+        <p class="note">Quem não lembra ou manda só quando lembra tem a dor que o Retornei resolve.</p>
+        <div class="hbars" id="methodBars"></div>
+      </section>
+
+      <section class="card wide">
+        <h2>Por nicho</h2>
+        <div class="table-wrap"><table id="nicheTable"></table></div>
+      </section>
+
+      <section class="card wide">
+        <h2>De onde vieram</h2>
+        <p class="note">Pelos parâmetros UTM do link do anúncio. Use utm_content para identificar cada criativo.</p>
+        <div class="table-wrap"><table id="sourceTable"></table></div>
+      </section>
+
+      <section class="card wide">
+        <div class="card-head">
+          <h2>Inscrições</h2>
+          <div class="list-tools">
+            <input class="search" id="leadSearch" type="search" placeholder="Buscar nome ou WhatsApp" aria-label="Buscar inscrição">
+            <button class="btn btn-soft" type="button" id="exportCsv">Baixar planilha</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table id="leadTable"></table></div>
+      </section>
+
+      <section class="card wide later">
+        <h2>Quando o app lançar</h2>
+        <p class="note">Estas métricas entram aqui assim que os primeiros testes começarem.</p>
+        <div class="later-grid">
+          <div><b>Testes iniciados</b><span>Quantos cadastraram o cartão e começaram os 14 dias</span></div>
+          <div><b>Ativação</b><span>Quem mandou 5 ou mais lembretes nos 3 primeiros dias. Meta: 50%</span></div>
+          <div><b>Teste que vira assinante</b><span>Meta: 15% ou mais</span></div>
+          <div><b>Assinantes ativos</b><span>Fundadores (R$ 19) e normais (R$ 29)</span></div>
+          <div><b>Receita mensal</b><span>Soma das assinaturas ativas</span></div>
+          <div><b>Cancelamentos no mês</b><span>Meta: abaixo de 5%</span></div>
+          <div><b>Custo por assinante</b><span>Gasto em anúncio ÷ novos pagantes. Meta: R$ 60 a R$ 80</span></div>
+          <div><b>Clientes recuperados</b><span>Quantos clientes dos usuários voltaram pelos lembretes, e quanto isso somou</span></div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="/admin/admin.js" defer></script>
+</body>
+</html>
