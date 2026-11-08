@@ -53,9 +53,20 @@ const NICHES = {
 };
 
 // Página principal (/): texto genérico para qualquer serviço recorrente.
-// A demonstração do celular usa o exemplo da barbearia.
+// A demonstração mistura serviços de tipos diferentes para não puxar para um nicho.
 NICHES.geral = {
-  ...NICHES.barbearia,
+  back: { count: 12, money: 1150 },
+  due: [
+    { name: "Rafael Souza", service: "Corte de cabelo", days: 22, late: false,
+      msg: "Oi, Rafael! Já faz 22 dias do seu último corte. Quer agendar para essa semana? Tenho horário quinta e sexta.",
+      reply: "Bora! Quinta às 16h tem?", value: 45 },
+    { name: "Juliana Prado", service: "Lavagem do carro", days: 30, late: false,
+      msg: "Oi, Juliana! Faz um mês da última lavagem do carro. Quer agendar para essa semana?",
+      reply: "Quero sim! Sexta de manhã?", value: 90 },
+    { name: "Paulo Henrique", service: "Limpeza do ar-condicionado", days: 190, late: true,
+      msg: "Paulo, tudo bem? Faz mais de 6 meses da limpeza do ar-condicionado. Vale fazer antes do calor. Posso reservar um horário?",
+      reply: "Verdade! Pode ser sábado?", value: 180 },
+  ],
   copy: {
     headline: "Tem cliente que vinha sempre e sumiu. Você nem percebeu.",
     lead: "O Retornei avisa todo dia quais clientes estão na hora de voltar ao seu negócio e deixa a mensagem de WhatsApp pronta. Você só toca em enviar.",
@@ -158,6 +169,8 @@ function setRowState(row, state) {
   const { li, c } = row;
   li.dataset.state = state;
   li.classList.remove("is-late", "is-sent", "is-replied", "is-back");
+  const meta = li.querySelector(".due-meta");
+  if (meta) meta.textContent = `${c.service}, faz ${c.days} dias${c.late && state === "pending" ? ". Atrasado" : ""}`;
   const old = li.querySelector(".due-btn, .due-status");
   let action;
   if (state === "pending") {
