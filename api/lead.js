@@ -5,7 +5,7 @@
 //   SUPABASE_URL          ex.: https://abcdefgh.supabase.co
 //   SUPABASE_SERVICE_KEY  chave "service_role" do projeto (nunca coloque no front-end)
 
-const NICHES = ["barbearia", "estetica-automotiva"];
+const NICHES = ["geral", "barbearia", "estetica-automotiva"];
 const SIZES = ["ate-100", "100-300", "300-mais"];
 const METHODS = ["nao-lembro", "whatsapp-manual", "sistema", "outro"];
 
@@ -42,7 +42,7 @@ module.exports = async function handler(req, res) {
   if (lead.whatsapp.length < 10 || lead.whatsapp.length > 13) problems.push("whatsapp");
   if (!SIZES.includes(lead.size)) problems.push("size");
   if (!METHODS.includes(lead.current_method)) problems.push("current_method");
-  if (!NICHES.includes(lead.niche)) lead.niche = "barbearia";
+  if (!NICHES.includes(lead.niche)) lead.niche = "geral";
   if (problems.length) return res.status(400).json({ error: "Campos inválidos.", fields: problems });
 
   const url = process.env.SUPABASE_URL;

@@ -16,7 +16,8 @@ O Retornei mostra todo dia quais clientes de um negócio de serviço recorrente 
 
 ## Endereços por nicho
 
-- `/barbearia` (também é a página inicial `/`)
+- `/` página principal, com texto genérico para qualquer serviço recorrente
+- `/barbearia`
 - `/estetica-automotiva`
 
 Para criar um nicho novo: copie um bloco dentro de `NICHES` em `app.js`, troque os textos e os clientes de exemplo, e adicione o endereço em `vercel.json` e na lista `NICHES` de `api/lead.js`.

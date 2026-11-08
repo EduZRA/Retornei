@@ -52,13 +52,28 @@ const NICHES = {
   },
 };
 
+// Página principal (/): texto genérico para qualquer serviço recorrente.
+// A demonstração do celular usa o exemplo da barbearia.
+NICHES.geral = {
+  ...NICHES.barbearia,
+  copy: {
+    headline: "Tem cliente que vinha sempre e sumiu. Você nem percebeu.",
+    lead: "O Retornei avisa todo dia quais clientes estão na hora de voltar ao seu negócio e deixa a mensagem de WhatsApp pronta. Você só toca em enviar.",
+    step1: "Nome e WhatsApp. Dá para importar de uma planilha ou dos seus contatos em poucos minutos.",
+    step2: "Um toque depois de cada serviço. O Retornei calcula quando aquele cliente costuma voltar.",
+    step3: "Toda manhã aparece quem está na hora. A mensagem sai do seu número, com o seu jeito de falar.",
+    businessLabel: "Nome do negócio",
+  },
+  calc: { clients: 150, ticket: 60, lost: 2 },
+};
+
 function detectNiche() {
   const params = new URLSearchParams(location.search);
   const fromQuery = params.get("nicho");
   if (fromQuery && NICHES[fromQuery]) return fromQuery;
   const slug = location.pathname.replace(/^\/+|\/+$/g, "").split("/")[0];
   if (NICHES[slug]) return slug;
-  return "barbearia";
+  return "geral";
 }
 
 const nicheKey = detectNiche();
