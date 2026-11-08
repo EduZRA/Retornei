@@ -46,20 +46,39 @@
               <!-- preenchido pelo app.js -->
             </ul>
 
-            <div class="bubble" id="bubble" hidden>
-              <p class="bubble-to">Para <strong id="bubbleTo"></strong></p>
-              <p class="bubble-text" id="bubbleText"></p>
-              <p class="bubble-hint">No app de verdade, isso abre o seu WhatsApp com a mensagem já escrita.</p>
-              <button class="btn btn-small" id="bubbleClose" type="button">Fechar</button>
-            </div>
-
             <div class="screen-foot">
               <p class="foot-label">Voltaram este mês por lembrete</p>
               <p class="foot-value"><span id="backCount">14</span> clientes <span class="foot-money" id="backMoney">R$ 980</span></p>
             </div>
+
+            <!-- Conversa que abre ao tocar em Lembrar -->
+            <div class="chat" id="chat" aria-hidden="true">
+              <div class="chat-head">
+                <button class="chat-back" id="chatBack" type="button" aria-label="Voltar para a lista" tabindex="-1">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <span class="avatar avatar-small" id="chatAvatar"></span>
+                <div>
+                  <p class="chat-name" id="chatName"></p>
+                  <p class="chat-status" id="chatStatus">online</p>
+                </div>
+              </div>
+              <div class="chat-body" id="chatBody"></div>
+              <div class="chat-compose">
+                <p class="chat-draft" id="chatDraft"></p>
+                <button class="chat-send" id="chatSend" type="button" aria-label="Enviar mensagem" tabindex="-1">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l16-8-6 16-2.5-6.5L4 12z" fill="currentColor"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <span class="tap" id="tap" aria-hidden="true"></span>
           </div>
         </div>
-        <p class="phone-caption">Toque em <strong>Lembrar</strong> para ver a mensagem.</p>
+        <div class="phone-controls">
+          <p class="phone-caption" id="phoneCaption">Demonstração do app. Toque em <strong>Lembrar</strong> para testar você mesmo.</p>
+          <button class="link-btn" id="demoToggle" type="button">Pausar demonstração</button>
+        </div>
       </div>
     </section>
 

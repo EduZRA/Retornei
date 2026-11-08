@@ -16,11 +16,14 @@ const NICHES = {
     back: { count: 14, money: 980 },
     due: [
       { name: "Rafael Souza", service: "Corte", days: 22, late: false,
-        msg: "Fala, Rafael! Já faz 22 dias do seu último corte. Bora deixar na régua de novo? Tenho horário quinta e sexta à tarde." },
+        msg: "Fala, Rafael! Já faz 22 dias do seu último corte. Bora deixar na régua de novo? Tenho horário quinta e sexta à tarde.",
+        reply: "Bora! Quinta às 16h tem?", value: 45 },
       { name: "Diego Lima", service: "Barba", days: 17, late: false,
-        msg: "E aí, Diego! A barba já deve estar pedindo um trato. Quer que eu reserve um horário essa semana?" },
+        msg: "E aí, Diego! A barba já deve estar pedindo um trato. Quer que eu reserve um horário essa semana?",
+        reply: "Opa, sexta de manhã pode ser?", value: 30 },
       { name: "Marcos Paulo", service: "Corte e barba", days: 41, late: true,
-        msg: "Marcos, quanto tempo! Faz mais de um mês do último corte e barba. Separei um horário pra você sábado de manhã, serve?" },
+        msg: "Marcos, quanto tempo! Faz mais de um mês do último corte e barba. Separei um horário pra você sábado de manhã, serve?",
+        reply: "Pô, verdade! Sábado 9h fechado.", value: 70 },
     ],
   },
 
@@ -37,11 +40,14 @@ const NICHES = {
     back: { count: 9, money: 1260 },
     due: [
       { name: "Juliana Prado", service: "Lavagem do Compass", days: 30, late: false,
-        msg: "Oi, Juliana! Já faz um mês da última lavagem do Compass. Quer agendar para essa semana? Tenho horário quarta e sexta." },
+        msg: "Oi, Juliana! Já faz um mês da última lavagem do Compass. Quer agendar para essa semana? Tenho horário quarta e sexta.",
+        reply: "Quero sim! Sexta de manhã?", value: 90 },
       { name: "Carlos Mendes", service: "Higienização do Onix", days: 92, late: false,
-        msg: "Carlos, tudo bem? Faz três meses da higienização do Onix. Bom momento para renovar. Posso reservar um horário?" },
+        msg: "Carlos, tudo bem? Faz três meses da higienização do Onix. Bom momento para renovar. Posso reservar um horário?",
+        reply: "Pode ser na semana que vem?", value: 150 },
       { name: "André Rocha", service: "Vitrificação da Hilux", days: 200, late: true,
-        msg: "André, a vitrificação da Hilux já passou do prazo da manutenção. Vale fazer a revisão para manter a proteção. Quando fica bom pra você?" },
+        msg: "André, a vitrificação da Hilux já passou do prazo da manutenção. Vale fazer a revisão para manter a proteção. Quando fica bom pra você?",
+        reply: "Verdade, nem lembrava. Quinta serve?", value: 300 },
     ],
   },
 };
@@ -67,7 +73,7 @@ document.querySelectorAll("[data-copy]").forEach((el) => {
 const nicheField = document.getElementById("nicheField");
 if (nicheField) nicheField.value = nicheKey;
 
-// ---------- Exemplo do app ----------
+// ---------- Exemplo do app (demonstração automática + uso livre) ----------
 const brl = (n) => n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 
 function todayLabel() {
@@ -75,85 +81,364 @@ function todayLabel() {
   const text = d.toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" });
   return text.charAt(0).toUpperCase() + text.slice(1).replace("-feira", "");
 }
+const nowTime = () => new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+const initials = (name) => name.split(" ").slice(0, 2).map((p) => p[0]).join("");
 
-const list = document.getElementById("dueList");
-const dueCount = document.getElementById("dueCount");
-const dueLabel = document.getElementById("dueLabel");
-const bubble = document.getElementById("bubble");
-const bubbleTo = document.getElementById("bubbleTo");
-const bubbleText = document.getElementById("bubbleText");
-const bubbleClose = document.getElementById("bubbleClose");
-const backCountEl = document.getElementById("backCount");
-const backMoneyEl = document.getElementById("backMoney");
+const $ = (id) => document.getElementById(id);
+const screen = document.querySelector(".screen");
+const list = $("dueList");
+const dueCount = $("dueCount");
+const dueLabel = $("dueLabel");
+const backCountEl = $("backCount");
+const backMoneyEl = $("backMoney");
+const chat = $("chat");
+const chatName = $("chatName");
+const chatAvatar = $("chatAvatar");
+const chatStatus = $("chatStatus");
+const chatBody = $("chatBody");
+const chatDraft = $("chatDraft");
+const chatSend = $("chatSend");
+const chatBack = $("chatBack");
+const tap = $("tap");
+const caption = $("phoneCaption");
+const demoToggle = $("demoToggle");
 
-document.getElementById("screenDate").textContent = todayLabel();
-backCountEl.textContent = niche.back.count;
-backMoneyEl.textContent = brl(niche.back.money);
+$("screenDate").textContent = todayLabel();
 
-let pending = niche.due.length;
-let lastButton = null;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-function updateCount() {
+// Estado da tela
+let rows = [];          // { c, li, action }
+let back = { ...niche.back };
+let current = null;     // linha com a conversa aberta
+
+// A demonstração roda numa "sessão"; trocar o número cancela a que estiver rodando.
+let session = 0;
+class Cancelled extends Error {}
+const wait = (ms, id) => new Promise((resolve, reject) => {
+  setTimeout(() => (id === session ? resolve() : reject(new Cancelled())), ms);
+});
+
+function setCount() {
+  const pending = rows.filter((r) => r.li.dataset.state === "pending").length;
   dueCount.textContent = pending;
-  dueLabel.textContent = pending === 1 ? "cliente na hora de voltar" : "clientes na hora de voltar";
-  if (pending === 0) dueLabel.textContent = "clientes pendentes. Tudo em dia.";
+  dueLabel.textContent = pending === 0 ? "clientes pendentes. Tudo em dia."
+    : pending === 1 ? "cliente na hora de voltar" : "clientes na hora de voltar";
 }
 
-function initials(name) {
-  return name.split(" ").slice(0, 2).map((p) => p[0]).join("");
+function setBack(count, money, animate) {
+  backCountEl.textContent = count;
+  if (!animate || reduceMotion) { backMoneyEl.textContent = brl(money); return; }
+  const from = back.money;
+  const start = performance.now();
+  const step = (t) => {
+    const k = Math.min(1, (t - start) / 700);
+    backMoneyEl.textContent = brl(Math.round(from + (money - from) * (1 - Math.pow(1 - k, 3))));
+    if (k < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
 }
 
-niche.due.forEach((c) => {
-  const li = document.createElement("li");
-  li.className = "due" + (c.late ? " is-late" : "");
+function setRowState(row, state) {
+  const { li, c } = row;
+  li.dataset.state = state;
+  li.classList.remove("is-late", "is-sent", "is-replied", "is-back");
+  const old = li.querySelector(".due-btn, .due-status");
+  let action;
+  if (state === "pending") {
+    if (c.late) li.classList.add("is-late");
+    action = document.createElement("button");
+    action.type = "button";
+    action.className = "due-btn";
+    action.textContent = "Lembrar";
+    action.setAttribute("aria-label", `Lembrar ${c.name}`);
+    action.addEventListener("click", (e) => {
+      if (e.isTrusted && demoOn) {
+        const idx = rows.indexOf(row);
+        takeOver();
+        openChat(rows[idx]);
+        return;
+      }
+      openChat(row);
+    });
+  } else {
+    action = document.createElement("span");
+    action.className = "due-status";
+    const labels = { sent: "Enviado", replied: "Respondeu", back: "Voltou" };
+    action.textContent = labels[state];
+    li.classList.add(state === "sent" ? "is-sent" : state === "replied" ? "is-replied" : "is-back");
+    if (!reduceMotion) { li.classList.remove("flash"); void li.offsetWidth; li.classList.add("flash"); }
+  }
+  old.replaceWith(action);
+  row.action = action;
+  setCount();
+}
 
-  const avatar = document.createElement("span");
-  avatar.className = "avatar";
-  avatar.setAttribute("aria-hidden", "true");
-  avatar.textContent = initials(c.name);
+function buildList() {
+  list.textContent = "";
+  rows = niche.due.map((c) => {
+    const li = document.createElement("li");
+    li.className = "due";
 
-  const info = document.createElement("div");
-  const name = document.createElement("p");
-  name.className = "due-name";
-  name.textContent = c.name;
-  const meta = document.createElement("p");
-  meta.className = "due-meta";
-  meta.textContent = `${c.service}, faz ${c.days} dias${c.late ? ". Atrasado" : ""}`;
-  info.append(name, meta);
+    const avatar = document.createElement("span");
+    avatar.className = "avatar";
+    avatar.setAttribute("aria-hidden", "true");
+    avatar.textContent = initials(c.name);
 
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "due-btn";
-  btn.textContent = "Lembrar";
-  btn.setAttribute("aria-label", `Lembrar ${c.name}`);
-  btn.addEventListener("click", () => {
-    if (li.classList.contains("is-sent")) return;
-    bubbleTo.textContent = c.name;
-    bubbleText.textContent = c.msg;
-    bubble.hidden = false;
-    lastButton = btn;
-    bubbleClose.focus();
-    li.classList.remove("is-late");
-    li.classList.add("is-sent");
-    btn.textContent = "Enviado";
-    btn.setAttribute("aria-label", `Lembrete enviado para ${c.name}`);
-    pending -= 1;
-    updateCount();
+    const info = document.createElement("div");
+    const name = document.createElement("p");
+    name.className = "due-name";
+    name.textContent = c.name;
+    const meta = document.createElement("p");
+    meta.className = "due-meta";
+    meta.textContent = `${c.service}, faz ${c.days} dias${c.late ? ". Atrasado" : ""}`;
+    info.append(name, meta);
+
+    const placeholder = document.createElement("span");
+    placeholder.className = "due-status";
+    li.append(avatar, info, placeholder);
+    list.append(li);
+
+    const row = { c, li, action: placeholder };
+    setRowState(row, "pending");
+    return row;
   });
-
-  li.append(avatar, info, btn);
-  list.append(li);
-});
-updateCount();
-
-function closeBubble() {
-  bubble.hidden = true;
-  if (lastButton) lastButton.focus();
+  back = { ...niche.back };
+  setBack(back.count, back.money, false);
+  setCount();
 }
-bubbleClose.addEventListener("click", closeBubble);
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !bubble.hidden) closeBubble();
+
+// ----- Conversa -----
+function addMessage(kind, text) {
+  const m = document.createElement("div");
+  m.className = `msg msg-${kind}`;
+  const t = document.createElement("span");
+  t.textContent = text;
+  const meta = document.createElement("span");
+  meta.className = "msg-meta";
+  meta.textContent = nowTime();
+  if (kind === "out") {
+    const ticks = document.createElement("span");
+    ticks.className = "ticks";
+    ticks.textContent = "✓✓";
+    meta.append(ticks);
+  }
+  m.append(t, meta);
+  chatBody.append(m);
+  return m;
+}
+
+function showTyping() {
+  const m = document.createElement("div");
+  m.className = "msg msg-in msg-typing";
+  m.setAttribute("aria-label", "digitando");
+  m.innerHTML = "<i></i><i></i><i></i>";
+  chatBody.append(m);
+  chatStatus.textContent = "digitando...";
+  return m;
+}
+
+function openChat(row, typed = false) {
+  current = row;
+  chatName.textContent = row.c.name;
+  chatAvatar.textContent = initials(row.c.name);
+  chatStatus.textContent = "online";
+  chatBody.textContent = "";
+  chatDraft.textContent = typed ? "" : row.c.msg;
+  chatSend.disabled = false;
+  chat.classList.add("is-open");
+  chat.setAttribute("aria-hidden", "false");
+  chatSend.tabIndex = 0;
+  chatBack.tabIndex = 0;
+  if (!typed) chatSend.focus({ preventScroll: true });
+}
+
+function closeChat() {
+  chat.classList.remove("is-open");
+  chat.setAttribute("aria-hidden", "true");
+  chatSend.tabIndex = -1;
+  chatBack.tabIndex = -1;
+  const row = current;
+  current = null;
+  if (row && row.action && row.action.focus) row.action.focus({ preventScroll: true });
+  return row;
+}
+
+function sendDraft() {
+  if (!current || !chatDraft.textContent) return;
+  addMessage("out", chatDraft.textContent);
+  chatDraft.textContent = "";
+  chatSend.disabled = true;
+  setRowState(current, "sent");
+}
+
+// Uso livre: a resposta do cliente chega sozinha depois de enviar.
+async function manualReply(row, id) {
+  await wait(900, id);
+  // As bolhas só aparecem se a conversa desse cliente ainda estiver aberta.
+  const typing = current === row ? showTyping() : null;
+  await wait(1300, id);
+  if (typing) typing.remove();
+  if (current === row) {
+    chatStatus.textContent = "online";
+    addMessage("in", row.c.reply);
+  }
+  setRowState(row, "replied");
+  if (current !== row) {
+    await wait(500, id);
+    markBack(row);
+  }
+}
+
+chatSend.addEventListener("click", (e) => {
+  if (!e.isTrusted) return;
+  if (demoOn && current) { stopDemo(YOUR_TURN); chatDraft.textContent = current.c.msg; }
+  const row = current;
+  sendDraft();
+  if (row) manualReply(row, session).catch(() => {});
 });
+
+function handleBack() {
+  if (demoOn) stopDemo(YOUR_TURN);
+  const row = closeChat();
+  if (row && row.li.dataset.state === "replied") {
+    const id = session;
+    wait(500, id).then(() => markBack(row)).catch(() => {});
+  }
+}
+
+chatBack.addEventListener("click", (e) => {
+  if (e.isTrusted) handleBack();
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && current) handleBack();
+});
+
+function markBack(row) {
+  setRowState(row, "back");
+  const next = { count: back.count + 1, money: back.money + row.c.value };
+  setBack(next.count, next.money, true);
+  back = next;
+}
+
+// ----- Dedo da demonstração -----
+function moveTapTo(el) {
+  const s = screen.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  tap.style.transform = `translate(${r.left - s.left + r.width / 2}px, ${r.top - s.top + r.height / 2}px)`;
+  tap.classList.add("is-visible");
+}
+async function press(el, id) {
+  moveTapTo(el);
+  await wait(800, id);
+  tap.classList.remove("is-press");
+  void tap.offsetWidth;
+  tap.classList.add("is-press");
+  await wait(220, id);
+}
+
+async function typeInto(el, text, id) {
+  el.textContent = "";
+  const step = Math.max(14, Math.min(30, 2600 / text.length));
+  for (let i = 0; i < text.length; i += 2) {
+    el.textContent = text.slice(0, i + 2);
+    await wait(step, id);
+  }
+}
+
+// Uma volta completa com um cliente.
+async function demoCustomer(row, id) {
+  await press(row.action, id);
+  openChat(row, true);
+  await wait(500, id);
+  moveTapTo(chatDraft);
+  await typeInto(chatDraft, row.c.msg, id);
+  await wait(400, id);
+  await press(chatSend, id);
+  sendDraft();
+  tap.classList.remove("is-visible");
+  await wait(900, id);
+  const typing = showTyping();
+  await wait(1400, id);
+  typing.remove();
+  chatStatus.textContent = "online";
+  addMessage("in", row.c.reply);
+  setRowState(row, "replied");
+  await wait(1800, id);
+  await press(chatBack, id);
+  closeChat();
+  tap.classList.remove("is-visible");
+  await wait(900, id);
+  markBack(row);
+  await wait(1800, id);
+}
+
+let demoOn = !reduceMotion;
+const YOUR_TURN = "Agora é com você: toque em <strong>Lembrar</strong>, envie e veja o cliente voltar.";
+let visible = false;
+
+async function runDemo() {
+  const id = ++session;
+  closeChat();
+  buildList();
+  tap.classList.remove("is-visible");
+  caption.innerHTML = "Demonstração do app. Toque em <strong>Lembrar</strong> para testar você mesmo.";
+  demoToggle.textContent = "Pausar demonstração";
+  try {
+    while (true) {
+      await wait(1400, id);
+      await demoCustomer(rows[0], id);
+      const late = rows.find((r) => r.c.late) || rows[rows.length - 1];
+      await demoCustomer(late, id);
+      await wait(2200, id);
+      closeChat();
+      buildList();
+    }
+  } catch (err) {
+    if (!(err instanceof Cancelled)) throw err;
+  }
+}
+
+function stopDemo(message) {
+  session++;
+  tap.classList.remove("is-visible");
+  demoOn = false;
+  caption.innerHTML = message;
+  demoToggle.textContent = "Ver demonstração";
+}
+
+// Quando a pessoa toca de verdade, a demonstração para e a tela recomeça para ela usar.
+function takeOver() {
+  if (!demoOn) return;
+  stopDemo(YOUR_TURN);
+  closeChat();
+  buildList();
+}
+
+demoToggle.addEventListener("click", () => {
+  if (demoOn) {
+    stopDemo("Demonstração pausada. Toque em <strong>Lembrar</strong> para testar você mesmo.");
+  } else {
+    demoOn = true;
+    runDemo();
+  }
+});
+
+buildList();
+if (reduceMotion) {
+  demoToggle.hidden = true;
+  caption.innerHTML = "Toque em <strong>Lembrar</strong>, envie e veja o cliente voltar.";
+} else if ("IntersectionObserver" in window) {
+  // Só anima quando o celular está na tela.
+  new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting;
+    if (visible && demoOn) runDemo();
+    else if (!visible && demoOn) session++;
+  }, { threshold: 0.4 }).observe(screen);
+} else {
+  runDemo();
+}
 
 // ---------- Calculadora ----------
 const calcClients = document.getElementById("calcClients");
