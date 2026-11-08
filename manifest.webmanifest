@@ -1,7 +1,7 @@
 {
   "name": "Retornei",
   "short_name": "Retornei",
-  "description": "Seus clientes de volta na hora certa. O que é bom, volta.",
+  "description": "Seu cliente de volta.",
   "lang": "pt-BR",
   "start_url": "/",
   "display": "standalone",
