@@ -525,14 +525,14 @@ function validate() {
     el.setAttribute("aria-invalid", good ? "false" : "true");
     if (!good && !firstBad) firstBad = el;
   });
-  ["size", "current_method"].forEach((group) => {
+  ["current_method"].forEach((group) => {
     const box = form.querySelector(`[data-group="${group}"]`);
     const good = pick(group) !== "";
     box.classList.toggle("is-invalid", !good);
     if (!good && !firstBad) firstBad = box.querySelector("input");
   });
   if (firstBad) {
-    showMsg("Preencha nome, WhatsApp com DDD e as duas escolhas para continuar.", "error");
+    showMsg("Preencha nome, WhatsApp com DDD e escolha como você lembra seus clientes hoje.", "error");
     firstBad.focus();
     return false;
   }
@@ -556,7 +556,6 @@ form.addEventListener("submit", async (e) => {
   const data = {
     name: form.elements.name.value.trim(),
     whatsapp: phone.value.replace(/\D/g, ""),
-    size: pick("size"),
     current_method: pick("current_method"),
     niche: nicheKey,
     website: form.elements.website.value, // armadilha para robôs

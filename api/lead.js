@@ -6,7 +6,6 @@
 //   SUPABASE_SERVICE_KEY  chave "service_role" do projeto (nunca coloque no front-end)
 
 const NICHES = ["geral", "barbearia", "estetica-automotiva"];
-const SIZES = ["ate-100", "100-300", "300-mais"];
 const METHODS = ["nao-lembro", "whatsapp-manual", "sistema", "outro"];
 
 const clean = (v, max) => String(v ?? "").trim().slice(0, max);
@@ -30,7 +29,6 @@ module.exports = async function handler(req, res) {
     name: clean(body.name, 80),
     whatsapp: clean(body.whatsapp, 20).replace(/\D/g, ""),
     business: clean(body.business, 80) || null,
-    size: clean(body.size, 20),
     current_method: clean(body.current_method, 30),
     niche: clean(body.niche, 40),
     tracking: body.tracking && typeof body.tracking === "object" ? body.tracking : {},
@@ -40,7 +38,6 @@ module.exports = async function handler(req, res) {
   const problems = [];
   if (lead.name.length < 2) problems.push("name");
   if (lead.whatsapp.length < 10 || lead.whatsapp.length > 13) problems.push("whatsapp");
-  if (!SIZES.includes(lead.size)) problems.push("size");
   if (!METHODS.includes(lead.current_method)) problems.push("current_method");
   if (!NICHES.includes(lead.niche)) lead.niche = "geral";
   if (problems.length) return res.status(400).json({ error: "Campos inválidos.", fields: problems });

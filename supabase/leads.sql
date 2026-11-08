@@ -7,7 +7,7 @@ create table if not exists public.leads (
   name           text not null,
   whatsapp       text not null,
   business       text,
-  size           text not null,
+  size           text,                 -- não é mais pedido no formulário
   current_method text not null,
   niche          text not null,
   tracking       jsonb not null default '{}'::jsonb,
