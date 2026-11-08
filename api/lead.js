@@ -3,12 +3,16 @@
 //
 // Variáveis de ambiente (configurar no painel da Vercel):
 //   SUPABASE_URL          ex.: https://abcdefgh.supabase.co
-//   SUPABASE_SERVICE_KEY  chave "service_role" do projeto (nunca coloque no front-end)
+//   SUPABASE_SERVICE_KEY  chave secreta do projeto, sb_secret_... (ou a antiga service_role). Nunca no front-end
 
 const NICHES = ["geral", "barbearia", "estetica-automotiva"];
 const METHODS = ["nao-lembro", "whatsapp-manual", "sistema", "outro"];
 
 const clean = (v, max) => String(v ?? "").trim().slice(0, max);
+
+// Chave secreta nova (sb_secret_...) vai só no cabeçalho apikey.
+// A chave antiga service_role (um JWT, começa com "eyJ") também vai como Bearer.
+const supabaseAuth = (key) => (key.startsWith("eyJ") ? { apikey: key, Authorization: `Bearer ${key}` } : { apikey: key });
 
 module.exports = async function handler(req, res) {
   if (req.method !== "POST") {
@@ -53,8 +57,7 @@ module.exports = async function handler(req, res) {
     const r = await fetch(`${url.replace(/\/$/, "")}/rest/v1/leads`, {
       method: "POST",
       headers: {
-        apikey: key,
-        Authorization: `Bearer ${key}`,
+        ...supabaseAuth(key),
         "Content-Type": "application/json",
         Prefer: "return=minimal",
       },

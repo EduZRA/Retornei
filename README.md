@@ -31,16 +31,16 @@ Nos anúncios, use parâmetros UTM para saber qual criativo trouxe cada inscriç
 ## Colocar no ar (uma vez)
 
 1. **Supabase:** crie uma conta grátis em supabase.com e um projeto novo. Abra **SQL Editor**, cole o conteúdo de `supabase/leads.sql` e clique em **Run**.
-2. Ainda no Supabase, vá em **Project Settings > API** e copie a **Project URL** e a chave **service_role**.
+2. Ainda no Supabase, copie a **Project URL** (botão **Connect**, no topo do projeto) e crie uma **chave secreta** em **Settings > API Keys** (começa com `sb_secret_`).
 3. **Vercel:** importe este repositório (Add New > Project). Não precisa mudar nenhuma configuração de build.
 4. Em **Settings > Environment Variables** do projeto na Vercel, crie:
    - `SUPABASE_URL` = a Project URL
-   - `SUPABASE_SERVICE_KEY` = a chave service_role
+   - `SUPABASE_SERVICE_KEY` = a chave secreta (`sb_secret_...`)
 5. Ainda nas variáveis de ambiente, crie `ADMIN_PASSWORD` com uma senha longa, só sua. É ela que abre o painel em `/admin`.
 6. Faça um novo deploy (Deployments > Redeploy) para as variáveis valerem.
 7. Teste: entre na página, preencha o formulário e confira a linha nova em **Table Editor > leads** no Supabase.
 
-A chave service_role dá acesso total ao banco. Ela fica só na Vercel, nunca no código nem no front-end.
+A chave secreta dá acesso total ao banco. Ela fica só na Vercel, nunca no código nem no front-end.
 
 ## Próximos passos
 

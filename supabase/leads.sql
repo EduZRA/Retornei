@@ -15,7 +15,7 @@ create table if not exists public.leads (
 );
 
 -- Segurança: ninguém de fora lê ou escreve direto na tabela.
--- Só a função /api/lead grava, usando a chave service_role (que ignora estas regras).
+-- Só as funções /api/lead e /api/admin acessam, usando a chave secreta (que ignora estas regras).
 alter table public.leads enable row level security;
 
 -- Consulta útil para acompanhar o teste por nicho e por anúncio:

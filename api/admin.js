@@ -44,7 +44,7 @@ module.exports = async function handler(req, res) {
   try {
     const query = "select=id,created_at,name,whatsapp,current_method,niche,tracking&order=created_at.desc&limit=5000";
     const r = await fetch(`${url.replace(/\/$/, "")}/rest/v1/leads?${query}`, {
-      headers: { apikey: key, Authorization: `Bearer ${key}` },
+      headers: key.startsWith("eyJ") ? { apikey: key, Authorization: `Bearer ${key}` } : { apikey: key },
     });
     if (!r.ok) {
       console.error("Supabase recusou a leitura:", r.status, await r.text());
