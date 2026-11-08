@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Retornei · Seus clientes de volta na hora certa</title>
+  <meta name="description" content="O Retornei mostra todo dia quais clientes estão na hora de voltar e deixa a mensagem de WhatsApp pronta para enviar.">
+  <meta name="theme-color" content="#123B4A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body data-niche="barbearia">
+
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Retornei, início">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 21a9 9 0 1 1 3.5 3.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/><path d="M6.5 16.5 9 21.5l5-2.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Retornei</span>
+    </a>
+    <a class="topbar-cta" href="#lista">Quero testar</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <h1 data-copy="headline">Tem cliente que cortava todo mês e sumiu. Você nem percebeu.</h1>
+        <p class="lead" data-copy="lead">O Retornei avisa todo dia quem está na hora de voltar para a sua barbearia e deixa a mensagem de WhatsApp pronta. Você só toca em enviar.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#lista">Entrar na lista de espera</a>
+          <p class="hero-note">Teste grátis no lançamento. Sem cartão.</p>
+        </div>
+      </div>
+
+      <div class="phone-wrap">
+        <div class="phone" role="region" aria-label="Exemplo da tela Hoje do aplicativo">
+          <div class="phone-notch" aria-hidden="true"></div>
+          <div class="screen">
+            <div class="screen-head">
+              <p class="screen-date" id="screenDate">Terça, 10 de novembro</p>
+              <h2 class="screen-title">Hoje</h2>
+              <p class="screen-sub"><strong id="dueCount">3</strong> <span id="dueLabel">clientes na hora de voltar</span></p>
+            </div>
+
+            <ul class="due-list" id="dueList">
+              <!-- preenchido pelo app.js -->
+            </ul>
+
+            <div class="bubble" id="bubble" hidden>
+              <p class="bubble-to">Para <strong id="bubbleTo"></strong></p>
+              <p class="bubble-text" id="bubbleText"></p>
+              <p class="bubble-hint">No app de verdade, isso abre o seu WhatsApp com a mensagem já escrita.</p>
+              <button class="btn btn-small" id="bubbleClose" type="button">Fechar</button>
+            </div>
+
+            <div class="screen-foot">
+              <p class="foot-label">Voltaram este mês por lembrete</p>
+              <p class="foot-value"><span id="backCount">14</span> clientes <span class="foot-money" id="backMoney">R$ 980</span></p>
+            </div>
+          </div>
+        </div>
+        <p class="phone-caption">Toque em <strong>Lembrar</strong> para ver a mensagem.</p>
+      </div>
+    </section>
+
+    <section class="calc" aria-labelledby="calcTitle">
+      <div class="calc-copy">
+        <h2 id="calcTitle">Quanto está saindo pela porta sem você ver?</h2>
+        <p>Ajuste com os números do seu negócio. A conta é simples: clientes que não voltaram no prazo vezes o valor de um atendimento.</p>
+      </div>
+      <form class="calc-form" id="calcForm" onsubmit="return false">
+        <label class="field">
+          <span>Clientes atendidos por mês</span>
+          <input type="number" id="calcClients" inputmode="numeric" min="0" step="10" value="200">
+        </label>
+        <label class="field">
+          <span>Valor médio de um atendimento (R$)</span>
+          <input type="number" id="calcTicket" inputmode="numeric" min="0" step="5" value="45">
+        </label>
+        <label class="field field-range">
+          <span>De cada 10, quantos não voltam no prazo? <output id="calcLostOut" for="calcLost">2</output></span>
+          <input type="range" id="calcLost" min="0" max="6" step="1" value="2">
+        </label>
+      </form>
+      <div class="calc-result" aria-live="polite">
+        <p class="calc-number" id="calcResult">R$ 1.800</p>
+        <p class="calc-caption">por mês podem estar indo embora. Trazer de volta metade disso já paga o Retornei muitas vezes.</p>
+      </div>
+    </section>
+
+    <section class="how" aria-labelledby="howTitle">
+      <h2 id="howTitle">Como funciona</h2>
+      <ol class="steps">
+        <li>
+          <h3>Cadastre seus clientes</h3>
+          <p data-copy="step1">Nome e WhatsApp. Dá para importar de uma planilha ou dos seus contatos em poucos minutos.</p>
+        </li>
+        <li>
+          <h3>Registre cada atendimento</h3>
+          <p data-copy="step2">Um toque depois do corte. O Retornei calcula quando aquele cliente costuma voltar.</p>
+        </li>
+        <li>
+          <h3>Mande o lembrete na hora certa</h3>
+          <p data-copy="step3">Toda manhã aparece quem está na hora. A mensagem sai do seu número, com o seu jeito de falar.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="signup" id="lista" aria-labelledby="signupTitle">
+      <div class="signup-copy">
+        <h2 id="signupTitle">Entre na lista de espera</h2>
+        <p>Quem entrar agora testa grátis no lançamento e garante o preço de fundador enquanto for assinante.</p>
+      </div>
+
+      <form class="signup-form" id="leadForm" novalidate>
+        <input type="hidden" name="niche" id="nicheField" value="barbearia">
+        <div class="hp" aria-hidden="true">
+          <label>Não preencha <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
+        <label class="field">
+          <span>Seu nome</span>
+          <input type="text" name="name" autocomplete="name" required maxlength="80">
+        </label>
+        <label class="field">
+          <span>WhatsApp com DDD</span>
+          <input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(11) 91234-5678" required maxlength="20">
+        </label>
+        <label class="field">
+          <span data-copy="businessLabel">Nome da barbearia</span>
+          <input type="text" name="business" maxlength="80">
+        </label>
+        <label class="field">
+          <span>Clientes atendidos por mês</span>
+          <select name="size" required>
+            <option value="">Escolha uma faixa</option>
+            <option value="ate-100">Até 100</option>
+            <option value="100-300">De 100 a 300</option>
+            <option value="300-mais">Mais de 300</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Como você lembra seus clientes de voltar hoje?</span>
+          <select name="current_method" required>
+            <option value="">Escolha uma opção</option>
+            <option value="nao-lembro">Não lembro, espero eles voltarem</option>
+            <option value="whatsapp-manual">Mando mensagem no WhatsApp quando lembro</option>
+            <option value="sistema">Uso um sistema ou app de agenda</option>
+            <option value="outro">Outro jeito</option>
+          </select>
+        </label>
+        <label class="consent">
+          <input type="checkbox" name="consent" required>
+          <span>Aceito receber mensagens do Retornei sobre o lançamento. Veja a <a href="/privacidade.html">política de privacidade</a>.</span>
+        </label>
+
+        <button class="btn btn-primary btn-block" type="submit" id="leadSubmit">Entrar na lista de espera</button>
+        <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="faq" aria-labelledby="faqTitle">
+      <h2 id="faqTitle">Perguntas rápidas</h2>
+      <details>
+        <summary>Preciso instalar alguma coisa?</summary>
+        <p>Não. O Retornei abre no navegador do celular e pode ficar na tela inicial com ícone, como um app.</p>
+      </details>
+      <details>
+        <summary>As mensagens saem do meu número?</summary>
+        <p>Sim. O Retornei prepara a mensagem e abre o seu WhatsApp. O cliente recebe de quem ele já conhece.</p>
+      </details>
+      <details>
+        <summary>Quanto vai custar?</summary>
+        <p>O preço sai no lançamento. Quem está na lista testa grátis antes e paga o valor de fundador, mais baixo, enquanto continuar assinante.</p>
+      </details>
+      <details>
+        <summary>Já uso um app de agenda. Serve para mim?</summary>
+        <p>Serve. Apps de agenda lembram de quem já marcou horário. O Retornei cuida de quem não marcou e está sumindo.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Retornei · protótipo em teste</p>
+    <a href="/privacidade.html">Política de privacidade</a>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

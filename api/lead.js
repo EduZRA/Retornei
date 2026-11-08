@@ -1,0 +1,75 @@
+// Recebe uma inscrição da lista de espera e grava no Supabase.
+// Roda como Função Serverless da Vercel. Sem dependências: usa a API REST do Supabase.
+//
+// Variáveis de ambiente (configurar no painel da Vercel):
+//   SUPABASE_URL          ex.: https://abcdefgh.supabase.co
+//   SUPABASE_SERVICE_KEY  chave "service_role" do projeto (nunca coloque no front-end)
+
+const NICHES = ["barbearia", "estetica-automotiva"];
+const SIZES = ["ate-100", "100-300", "300-mais"];
+const METHODS = ["nao-lembro", "whatsapp-manual", "sistema", "outro"];
+
+const clean = (v, max) => String(v ?? "").trim().slice(0, max);
+
+module.exports = async function handler(req, res) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", "POST");
+    return res.status(405).json({ error: "Use POST." });
+  }
+
+  let body = req.body;
+  if (typeof body === "string") {
+    try { body = JSON.parse(body); } catch { return res.status(400).json({ error: "JSON inválido." }); }
+  }
+  body = body || {};
+
+  // Armadilha para robôs: pessoas não veem esse campo.
+  if (body.website) return res.status(200).json({ ok: true });
+
+  const lead = {
+    name: clean(body.name, 80),
+    whatsapp: clean(body.whatsapp, 20).replace(/\D/g, ""),
+    business: clean(body.business, 80) || null,
+    size: clean(body.size, 20),
+    current_method: clean(body.current_method, 30),
+    niche: clean(body.niche, 40),
+    tracking: body.tracking && typeof body.tracking === "object" ? body.tracking : {},
+    user_agent: clean(req.headers["user-agent"], 300),
+  };
+
+  const problems = [];
+  if (lead.name.length < 2) problems.push("name");
+  if (lead.whatsapp.length < 10 || lead.whatsapp.length > 13) problems.push("whatsapp");
+  if (!SIZES.includes(lead.size)) problems.push("size");
+  if (!METHODS.includes(lead.current_method)) problems.push("current_method");
+  if (!NICHES.includes(lead.niche)) lead.niche = "barbearia";
+  if (problems.length) return res.status(400).json({ error: "Campos inválidos.", fields: problems });
+
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_KEY;
+  if (!url || !key) {
+    console.error("SUPABASE_URL ou SUPABASE_SERVICE_KEY não configurados.");
+    return res.status(503).json({ error: "Lista de espera ainda não configurada." });
+  }
+
+  try {
+    const r = await fetch(`${url.replace(/\/$/, "")}/rest/v1/leads`, {
+      method: "POST",
+      headers: {
+        apikey: key,
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal",
+      },
+      body: JSON.stringify(lead),
+    });
+    if (!r.ok) {
+      console.error("Supabase recusou o lead:", r.status, await r.text());
+      return res.status(502).json({ error: "Não foi possível salvar agora." });
+    }
+    return res.status(201).json({ ok: true });
+  } catch (err) {
+    console.error("Falha ao falar com o Supabase:", err);
+    return res.status(502).json({ error: "Não foi possível salvar agora." });
+  }
+};

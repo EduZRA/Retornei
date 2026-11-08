@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/barbearia", "destination": "/index.html" },
+    { "source": "/estetica-automotiva", "destination": "/index.html" }
+  ]
+}
