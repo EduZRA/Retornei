@@ -499,6 +499,12 @@ function updateCalc() {
 updateCalc();
 
 // ---------- Lista de espera ----------
+const doneDialog = document.getElementById("doneDialog");
+if (doneDialog) {
+  document.getElementById("doneClose").addEventListener("click", () => doneDialog.close());
+  // Toque fora da janela também fecha
+  doneDialog.addEventListener("click", (e) => { if (e.target === doneDialog) doneDialog.close(); });
+}
 const form = document.getElementById("leadForm");
 const submit = document.getElementById("leadSubmit");
 const msg = document.getElementById("formMsg");
@@ -586,6 +592,8 @@ form.addEventListener("submit", async (e) => {
     form.reset();
     nicheField.value = nicheKey;
     showMsg("Você está na lista. Avisamos pelo WhatsApp quando o teste grátis abrir.", "ok");
+    const done = document.getElementById("doneDialog");
+    if (done && typeof done.showModal === "function") done.showModal();
     submit.textContent = "Inscrição feita";
     if (typeof window.fbq === "function") window.fbq("track", "Lead", { content_category: nicheKey });
     if (typeof window.gtag === "function") window.gtag("event", "generate_lead", { niche: nicheKey });
