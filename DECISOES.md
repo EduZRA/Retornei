@@ -1,6 +1,6 @@
 # Retornei: decisões do projeto
 
-Resumo de tudo que foi decidido até 08/11/2026, para qualquer conversa nova retomar daqui.
+Resumo de tudo que foi decidido até 08/11/2026 (noite), para qualquer conversa nova retomar daqui.
 Plano completo (fases, custos, cronograma): https://claude.ai/artifact/QXBJkjroNJ3KHYHyFa6SWg
 
 ## Como trabalhar com o Eduardo
@@ -99,7 +99,9 @@ Pendente:
 
 ## Situação em 08/11/2026 e próximos passos
 
-1. **Em andamento:** Eduardo configurando o Supabase e as 3 variáveis na Vercel, depois testar uma inscrição e o `/admin`.
+1. **Feito (08/11):** Supabase criado (projeto `retornei`, ref `thlphaevedeuftmmvuhq`, São Paulo, RLS automático),
+   tabela `leads` criada, 3 variáveis na Vercel (Production). Inscrição real testada e aparecendo no `/admin`.
+   Após a inscrição abre uma janela "Você está na lista!" com o mascote e botão para o `/app`.
 2. Criar o Pixel do Meta e ligar a análise da Vercel.
 3. Vídeos verticais para anúncios (stories/reels) a partir das 3 demonstrações (geral, barbearia, estética).
 4. Rodar a validação (Fase 1) e acompanhar pelo `/admin`.
