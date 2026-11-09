@@ -101,7 +101,7 @@ Pendente:
 
 1. **Feito (08/11):** Supabase criado (projeto `retornei`, ref `thlphaevedeuftmmvuhq`, São Paulo, RLS automático),
    tabela `leads` criada, 3 variáveis na Vercel (Production). Inscrição real testada e aparecendo no `/admin`.
-   Após a inscrição abre uma janela "Você está na lista!" com o mascote e botão para o `/app`.
+   Após a inscrição abre uma janela "Você está na lista!" com o mascote e só o botão "Fechar".
 2. Criar o Pixel do Meta e ligar a análise da Vercel.
 3. Vídeos verticais para anúncios (stories/reels) a partir das 3 demonstrações (geral, barbearia, estética).
 4. Rodar a validação (Fase 1) e acompanhar pelo `/admin`.
