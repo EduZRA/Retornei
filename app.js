@@ -517,13 +517,69 @@ const tracking = {};
   if (params.get(k)) tracking[k] = params.get(k).slice(0, 200);
 });
 
-phone.addEventListener("input", () => {
-  const d = phone.value.replace(/\D/g, "").slice(0, 11);
+function maskPhone(el) {
+  const d = el.value.replace(/\D/g, "").slice(0, 11);
   let out = d;
   if (d.length > 2) out = `(${d.slice(0, 2)}) ${d.slice(2)}`;
   if (d.length > 7) out = `(${d.slice(0, 2)}) ${d.slice(2, d.length - 4)}-${d.slice(-4)}`;
-  phone.value = out;
-});
+  el.value = out;
+}
+phone.addEventListener("input", () => maskPhone(phone));
+
+// ---------- Início rápido: nome e WhatsApp logo depois da demonstração ----------
+// Ao tocar no botão, os dois campos já vão preenchidos para o formulário completo,
+// onde faltam só a pergunta e o aceite.
+const quickForm = document.getElementById("quickForm");
+if (quickForm) {
+  const qName = quickForm.elements.name;
+  const qPhone = quickForm.elements.whatsapp;
+  const qMsg = document.getElementById("quickMsg");
+  qPhone.addEventListener("input", () => maskPhone(qPhone));
+  quickForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const nameOk = qName.value.trim().length >= 2;
+    const phoneOk = qPhone.value.replace(/\D/g, "").length >= 10;
+    qName.setAttribute("aria-invalid", nameOk ? "false" : "true");
+    qPhone.setAttribute("aria-invalid", phoneOk ? "false" : "true");
+    if (!nameOk || !phoneOk) {
+      qMsg.textContent = "Preencha seu nome e o WhatsApp com DDD.";
+      qMsg.className = "form-msg is-error";
+      (nameOk ? qPhone : qName).focus();
+      return;
+    }
+    qMsg.textContent = "";
+    form.elements.name.value = qName.value.trim();
+    phone.value = qPhone.value;
+    document.getElementById("signupTitle").textContent = "Falta só uma pergunta";
+    document.getElementById("lista").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    const first = form.querySelector('input[name="current_method"]');
+    if (first) first.focus({ preventScroll: true });
+  });
+}
+
+// ---------- Botão fixo no rodapé do celular ----------
+// Aparece depois que o botão do topo sai da tela e some perto dos formulários.
+const stickyCta = document.getElementById("stickyCta");
+if (stickyCta && "IntersectionObserver" in window) {
+  stickyCta.hidden = false;
+  document.body.classList.add("has-sticky");
+  const seen = new Map();
+  const watched = [document.querySelector(".hero-actions"), quickForm, document.getElementById("lista")].filter(Boolean);
+  let typing = false;
+  const refresh = () => {
+    const anyVisible = watched.some((el) => seen.get(el));
+    stickyCta.classList.toggle("is-visible", !anyVisible && !typing && window.scrollY > 200);
+  };
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((en) => seen.set(en.target, en.isIntersecting));
+    refresh();
+  });
+  watched.forEach((el) => io.observe(el));
+  window.addEventListener("scroll", refresh, { passive: true });
+  // Com o teclado aberto, o botão fixo não deve cobrir o campo.
+  document.addEventListener("focusin", (e) => { typing = e.target.matches("input, textarea, select"); refresh(); });
+  document.addEventListener("focusout", () => { typing = false; refresh(); });
+}
 
 function showMsg(text, kind) {
   msg.textContent = text;
@@ -590,6 +646,7 @@ form.addEventListener("submit", async (e) => {
     });
     if (!res.ok) throw new Error(String(res.status));
     form.reset();
+    if (quickForm) quickForm.reset();
     nicheField.value = nicheKey;
     showMsg("Você está na lista. Avisamos pelo WhatsApp quando o teste grátis abrir.", "ok");
     const done = document.getElementById("doneDialog");

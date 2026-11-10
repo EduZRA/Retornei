@@ -90,6 +90,23 @@
       </div>
     </section>
 
+    <section class="quick" aria-labelledby="quickTitle">
+      <form class="quick-form" id="quickForm" novalidate>
+        <h2 id="quickTitle">Garanta seus 14 dias grátis</h2>
+        <p class="quick-sub">Comece por aqui. Leva 20&nbsp;segundos.</p>
+        <label class="field">
+          <span>Seu nome</span>
+          <input type="text" name="name" autocomplete="name" maxlength="80">
+        </label>
+        <label class="field">
+          <span>WhatsApp com DDD</span>
+          <input type="tel" name="whatsapp" autocomplete="tel" inputmode="tel" placeholder="(11) 91234-5678" maxlength="20">
+        </label>
+        <button class="btn btn-primary btn-block" type="submit">Quero testar grátis</button>
+        <p class="form-msg" id="quickMsg" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <section class="calc" aria-labelledby="calcTitle">
       <div class="calc-copy">
         <h2 id="calcTitle">Quanto está saindo pela porta sem você ver?</h2>
@@ -156,8 +173,9 @@
 
     <section class="signup" id="lista" aria-labelledby="signupTitle">
       <div class="signup-copy">
-        <h2 id="signupTitle">Entre na lista de espera</h2>
-        <p>Quem entrar agora testa 14 dias grátis quando lançar. As 50 primeiras inscrições garantem o preço de fundador, mais baixo, enquanto continuarem assinantes.</p>
+        <h2 id="signupTitle">Garanta seus 14 dias grátis</h2>
+        <p>O app está em finalização. Deixe seu WhatsApp e avisamos assim que abrir, para você começar o teste grátis.</p>
+        <p>As 50 primeiras inscrições garantem o preço de fundador, mais baixo, enquanto continuarem assinantes.</p>
       </div>
 
       <form class="signup-form" id="leadForm" novalidate>
@@ -202,6 +220,10 @@
     <p><strong>Retornei.</strong> Seu cliente de volta.</p>
     <a href="/privacidade.html">Política de privacidade</a>
   </footer>
+
+  <div class="sticky-cta" id="stickyCta" hidden>
+    <a class="btn btn-primary btn-block" href="#lista">Quero testar grátis</a>
+  </div>
 
   <dialog class="done" id="doneDialog" aria-labelledby="doneTitle">
     <img src="/marca/mascote-comemora-solto.svg" alt="" width="104" height="104">
