@@ -68,6 +68,11 @@ Um painel mostra quanto dinheiro voltou por causa dos lembretes.
   tamanho do negócio, para converter mais. Leva cerca de 13 segundos.
 - **Botão:** "Quero testar grátis". Abaixo: "14 dias grátis quando lançar. Leva 20 segundos." e
   "Preço de fundador para as 50 primeiras inscrições."
+- **Formulário rápido** logo depois da demonstração (10/11): só nome e WhatsApp, título "Garanta seus 14 dias grátis".
+  Ele não grava sozinho: leva ao formulário final com os dois campos preenchidos e o título "Falta só uma pergunta".
+- **Botão fixo no rodapé do celular** (10/11): "Quero testar grátis", some perto dos formulários e com o teclado aberto.
+- **Título da inscrição** (10/11): "Garanta seus 14 dias grátis" no lugar de "Entre na lista de espera", com o texto
+  "O app está em finalização...". Sem previsão de lançamento na página por enquanto.
 - Calculadora de quanto dinheiro se perde, com botão "Quero recuperar esses clientes".
 - Demonstração animada no celular: lembrar → mensagem → cliente responde → "Voltou" → mascote comemorando.
 
@@ -75,7 +80,13 @@ Um painel mostra quanto dinheiro voltou por causa dos lembretes.
 
 Feito: formulário menor, botões de toque, texto do botão, frase de risco, explicação do WhatsApp,
 botão após a calculadora, perguntas antes do formulário, vagas de fundador.
-Pendente:
+Pendente (revisão de conversão de 10/11, ainda não aprovados pelo Eduardo):
+- Tirar a pergunta e a caixa de aceite do formulário (pergunta iria para a janela de confirmação).
+- Título menor no celular e título mais curto para estética, para a demonstração aparecer na primeira tela.
+- Medir o meio do caminho (toque no botão, calculadora, início do formulário).
+- Página pronta por nicho (hoje o texto troca depois de carregar), imagem de prévia do link, FAQ com mais objeções.
+
+Pendente (anterior):
 - **Pixel do Meta + Vercel Analytics (+ Microsoft Clarity opcional)**: aguardando o Eduardo criar o Pixel.
 - **Prova social** ("37 barbearias já estão na lista"): só com números reais, depois de umas 20 inscrições.
 - **Contador de vagas de fundador** na página: junto com a prova social.
